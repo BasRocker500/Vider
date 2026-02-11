@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องคิดเลขดอกลอยรายวัน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#10B981', // Emerald 500
+                        secondary: '#3B82F6', // Blue 500
+                        dark: '#111827', // Gray 900
+                        card: '#1F2937', // Gray 800
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">
+
+    <div
+        class="w-full max-w-lg bg-card rounded-2xl shadow-2xl p-6 md:p-8 space-y-6 transform transition-all hover:scale-[1.01] duration-300">
+
+        <!-- Header -->
+        <div class="text-center space-y-2">
+            <h2 class="text-2xl font-bold text-white mb-2 tracking-wide">
+                VIDER <span class="text-primary">เงินด่วน</span> ไวทันใจ
+            </h2>
+            <div class="mb-4">
+                <img src="logo.png" alt="VIDER Logo" class="h-40 mx-auto object-contain">
+            </div>
+            <h1
+                class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                เครื่องคิดเลขดอกลอยรายวัน
+            </h1>
+            <p class="text-gray-400 text-sm">คำนวณง่าย รวดเร็ว แม่นยำ</p>
+        </div>
+
+        <!-- Inputs Section -->
+        <div class="space-y-4">
+            <!-- Principal Input -->
+            <div class="group">
+                <label for="principal"
+                    class="block text-sm font-medium text-gray-300 mb-1 group-focus-within:text-primary transition-colors">
+                    จำนวนเงินต้นที่กู้ (บาท)
+                </label>
+                <div class="relative">
+                    <input type="text" id="principal" inputmode="numeric" placeholder="ตัวอย่าง: 10,000"
+                        class="w-full bg-gray-700 border border-gray-600 rounded-xl py-3 px-4 pl-12 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-lg font-semibold tracking-wide">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <span class="text-gray-400">฿</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interest Rate Display (Fixed) -->
+            <div class="flex items-center justify-between p-4 bg-gray-700/50 rounded-xl border border-gray-600/50">
+                <span class="text-gray-300">อัตราดอกเบี้ย :</span>
+                <span class="text-primary font-bold text-lg">2% ต่อวัน (คงที่)</span>
+            </div>
+        </div>
+
+        <!-- Real-time Result -->
+        <div
+            class="bg-gradient-to-br from-primary/10 to-secondary/10 border border-primary/20 rounded-xl p-6 text-center space-y-2 animate-fade-in-up">
+            <h2 class="text-gray-300 text-sm uppercase tracking-wider">ดอกเบี้ยที่คุณต้องจ่าย</h2>
+            <div class="text-3xl md:text-4xl font-bold text-white flex items-center justify-center gap-2">
+                <span id="dailyInterest">0</span>
+                <span class="text-lg text-gray-400 font-normal">บาท/วัน</span>
+            </div>
+        </div>
+
+        <!-- Date Picker Section -->
+        <div class="space-y-3 pt-4 border-t border-gray-700/50">
+            <label class="block text-sm text-gray-300 font-medium">
+                📅 หากคืนเงินวันอื่น ดอกเบี้ยสะสมจะเป็นเท่าไหร่?
+            </label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="relative">
+                    <input type="date" id="returnDate"
+                        class="w-full bg-gray-700 border border-gray-600 rounded-xl py-2.5 px-4 text-white focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all [color-scheme:dark]">
+                </div>
+                <div
+                    class="bg-gray-800 rounded-xl border border-gray-700 p-3 flex flex-col justify-center items-center">
+                    <span class="text-xs text-gray-400">ดอกเบี้ยสะสมรวม</span>
+                    <span class="text-lg font-bold text-secondary" id="accumulatedInterest">0 บาท</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparative Table -->
+        <div class="overflow-hidden rounded-xl border border-gray-700">
+            <table class="w-full text-sm text-left text-gray-300">
+                <thead class="text-xs text-gray-400 uppercase bg-gray-700/50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">ระยะเวลา</th>
+                        <th scope="col" class="px-6 py-3 text-right">ดอกเบี้ยรวม (บาท)</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700 bg-gray-800/50" id="comparisonTable">
+                    <tr class="hover:bg-gray-700/30 transition-colors">
+                        <td class="px-6 py-4 font-medium text-white">ผ่านไป 7 วัน</td>
+                        <td class="px-6 py-4 text-right font-mono text-primary" id="table7Days">0</td>
+                    </tr>
+                    <tr class="hover:bg-gray-700/30 transition-colors">
+                        <td class="px-6 py-4 font-medium text-white">ผ่านไป 15 วัน</td>
+                        <td class="px-6 py-4 text-right font-mono text-primary" id="table15Days">0</td>
+                    </tr>
+                    <tr class="hover:bg-gray-700/30 transition-colors">
+                        <td class="px-6 py-4 font-medium text-white">ผ่านไป 30 วัน</td>
+                        <td class="px-6 py-4 text-right font-mono text-primary" id="table30Days">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer Warning -->
+        <div class="text-center pt-4">
+            <p class="text-xs text-red-400/80 bg-red-900/10 py-2 px-4 rounded-lg inline-block border border-red-900/20">
+                ⚠️ คำเตือน: นี่คือการคำนวณดอกเบี้ยแบบลอยรายวันเท่านั้น ไม่รวมการหักเงินต้น
+            </p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
