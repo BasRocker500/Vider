@@ -132,6 +132,31 @@
             </p>
         </div>
 
+        <!-- Credit Check Section -->
+        <div class="pt-4 border-t border-gray-700/50 space-y-4">
+            <div class="flex items-center gap-2">
+                <span class="text-lg">🔍</span>
+                <h3 class="text-sm font-semibold text-gray-300 uppercase tracking-wider">ตรวจสอบเครดิตของคุณ</h3>
+            </div>
+            <div class="group">
+                <label for="customerIdInput" class="block text-sm font-medium text-gray-400 mb-1">
+                    กรอกรหัสประจำตัวลูกค้า
+                </label>
+                <div class="flex gap-2">
+                    <input type="text" id="customerIdInput" placeholder="ตัวอย่าง: 09001" maxlength="5"
+                        class="flex-1 bg-gray-700 border border-gray-600 rounded-xl py-3 px-4 text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-mono tracking-widest text-center text-lg">
+                    <button id="checkCreditBtn"
+                        class="bg-gradient-to-r from-primary to-secondary hover:opacity-90 active:scale-95 transition-all text-white font-semibold px-5 py-3 rounded-xl text-sm shadow-lg">
+                        ตรวจสอบ
+                    </button>
+                </div>
+            </div>
+
+            <!-- Credit Result Card (hidden by default) -->
+            <div id="creditResult" class="hidden animate-fade-in-up">
+            </div>
+        </div>
+
     </div>
 
     <script src="script.js"></script>
